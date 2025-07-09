@@ -1,6 +1,7 @@
 
 "use client";
 import { TextField, Button, Stack, Typography, Box } from "@mui/material";
+import Link from "next/link";
 
 export default function AuthForm({ isSignup, name, setName, email, setEmail, password, setPassword, onSubmit }) {
   return (
@@ -37,8 +38,13 @@ export default function AuthForm({ isSignup, name, setName, email, setEmail, pas
           <Button type="submit" variant="contained">
             {isSignup ? "Signup" : "Login"}
           </Button>
+
+          <Link href="/signup" sx={{ textAlign:"center" }}>
+            Signup
+          </Link>
         </Stack>
       </form>
+
     </Box>
   );
 }
