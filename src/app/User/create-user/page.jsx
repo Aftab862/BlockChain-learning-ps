@@ -1,11 +1,11 @@
 "use client";
 import { useState } from "react";
 import axios from "axios";
-import UserForm from "../../components/UserForm";
 import { useRouter } from "next/navigation";
 import { Container, Box } from "@mui/material";
-import config from "../../../config";
- 
+import config from './../../../../config';
+import UserForm from './../../../components/UserForm';
+
 export default function CreateUser() {
 
   const [name, setName] = useState("");

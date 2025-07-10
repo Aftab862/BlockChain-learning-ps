@@ -40,7 +40,7 @@ export default function AuthForm({ isSignup, name, setName, email, setEmail, pas
             {isSignup ? "Signup" : "Login"}
           </Button>
 
-          <Link component={NextLink} href={ isSignup?"/login": "/signup"} sx={{ textAlign: "center" }}>
+          <Link component={NextLink} href={ isSignup?"/Auth/login": "/Auth/signup"} sx={{ textAlign: "center" }}>
   {isSignup ? "Login" : "Signup"}
 </Link>
         </Stack>

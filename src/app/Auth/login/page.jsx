@@ -4,8 +4,9 @@ import { useState }  from "react";
 import AuthForm from "@/components/AuthForm";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import config from "../../../config";
+
 import React from "react";
+import config from './../../../../config';
 
 export default function Login() {
   const [email, setEmail] = useState("");

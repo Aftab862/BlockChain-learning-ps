@@ -3,7 +3,8 @@ import { useState } from "react";
 import AuthForm from "@/components/AuthForm";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import config from "../../../config";
+import config from './../../../../config';
+
 
 export default function Signup() {
   const [name, setName] = useState("");
@@ -16,7 +17,7 @@ export default function Signup() {
     try {
       const res = await axios.post(`${config.baseUrl}/signup`, { name, email, password });
       alert(res.data.message);
-      router.push("/login");
+      router.push("/Auth/login");
     } catch (err) {
       alert(err.response?.data?.error || "Signup failed");
     }

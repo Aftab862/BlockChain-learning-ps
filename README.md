@@ -34,3 +34,51 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+
+
+/app
+│
+├── layout.jsx               # Global layout (navbar, etc.)
+├── page.jsx                 # Landing page or redirect logic
+│
+├── auth/                   # Auth Pages
+│   ├── login/page.jsx
+│   └── register/page.jsx
+│
+├── user/                   # User Dashboard
+│   ├── layout.jsx          # Sidebar/header for user
+│   ├── page.jsx            # Dashboard home
+│   ├── submit/page.jsx     # Data submission form
+│   ├── status/page.jsx     # View status of submission
+│   └── notifications/page.jsx  # Notifications from admin
+│
+├── admin/                  # Admin Dashboard
+│   ├── layout.jsx
+│   ├── page.jsx            # Admin dashboard home
+│   ├── users/page.jsx      # List of users
+│   ├── users/[id]/page.jsx # View individual user details
+│   ├── submissions/page.jsx     # All submissions (filterable)
+│   └── review/[id]/page.jsx     # Review one submission
+│
+/components
+│   ├── Navbar.jsx
+│   ├── Sidebar.jsx
+│   ├── NotificationBell.jsx
+│   ├── SubmissionCard.jsx
+│   └── ReviewForm.jsx
+│
+/hooks
+│   └── useNotifications.js   # Poll or fetch notifications
+│
+/services
+│   ├── authService.js
+│   ├── submissionService.js
+│   ├── reviewService.js
+│   └── notificationService.js
+│
+/lib
+│   └── fetcher.js            # axios or fetch wrapper
+│
+/public                      # Static assets (images, logos, etc.)
+/styles                      # CSS or Tailwind CSS styles

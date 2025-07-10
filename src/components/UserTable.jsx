@@ -30,7 +30,7 @@ export default function UserTable({ users, onDelete }) {
                   <TableCell>{user.phone}</TableCell>
                    <TableCell>{user.city}</TableCell>
                 <TableCell>
-                  <Button onClick={() => router.push(`/edit-user/${user.user_id}`)}>Edit</Button>
+                  <Button onClick={() => router.push(`/User/edit-user/${user.user_id}`)}>Edit</Button>
                   <Button color="error" onClick={() => onDelete(user.user_id)}>Delete</Button>
                 </TableCell>
               </TableRow>

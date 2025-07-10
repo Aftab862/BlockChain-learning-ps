@@ -2,8 +2,8 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
-import UserForm from "../../../components/UserForm";
-import config from "../../../../config";
+import config from './../../../../../config';
+import UserForm from './../../../../components/UserForm';
 
 export default function EditUser() {
   const { id } = useParams();

@@ -34,7 +34,7 @@ export default function Home() {
 
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <h1>Users</h1>
-          <Button variant="contained" onClick={() => router.push("/create-user")}>Add User</Button>
+          <Button variant="contained" onClick={() => router.push("/User/create-user")}>Add User</Button>
         </Box>
 
         <Box py={5}>

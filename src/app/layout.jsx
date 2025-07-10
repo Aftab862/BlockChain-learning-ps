@@ -1,5 +1,5 @@
-// app/layout.jsx
- import AuthWrapper from "./AuthWrapper";
+
+import AuthWrapper from './Auth/AuthWrapper';
 
 export default function RootLayout({ children }) {
   return (
