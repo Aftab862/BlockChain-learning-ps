@@ -1,55 +1,50 @@
 "use client"
 
-import { useState }  from "react";
-import AuthForm from "@/components/AuthForm";
-import axios from "axios";
-import { useRouter } from "next/navigation";
-
-import React from "react";
-import config from './../../../../config';
+import { useState } from "react"
+import AuthForm from "@/components/AuthForm"
+import { useRouter } from "next/navigation"
+import { useLoginMutation } from "../../../store/slices/auth"
 
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const router = useRouter();
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const router = useRouter()
 
-const handleLogin = async (e) => {
-  e.preventDefault();
+  const [login, { isLoading, error }] = useLoginMutation()
 
-  if (!email || !password) {
-    alert("Please enter both email and password.");
-    return;
-  }
- 
+  const handleLogin = async (e) => {
+    e.preventDefault()
 
-  try {
-    const response = await axios.post(`${config.baseUrl}/login`, {
-      email,
-      password,
-    });
-    const { token, message } = response.data;
-
-    if (!token) {
-      alert("Login failed: No token returned.");
-      return;
+    if (!email || !password) {
+      alert("Please enter both email and password.")
+      return
     }
 
-    // Store token (consider using a constant key)
-    localStorage.setItem("auth-token", token);
+    try {
+      const res = await login({ email, password }).unwrap() // <-- RTK Query call
 
-    // Optional: log success
-    console.log("Login successful:", message);
+      const { token, message, role } = res
 
-    // Redirect to home page
-    router.push("/");
-  } catch (error) {
-    const errorMessage =
-      error.response?.data?.error || "User Not Found. Please try again.";
-    console.error("Login error:", errorMessage);
-    alert(errorMessage);
+      if (!token) {
+        alert("Login failed: No token returned.")
+        return
+      }
+
+      // ✅ Store auth data
+      localStorage.setItem("auth-token", token)
+      localStorage.setItem("user-role", role)
+
+      console.log("Login successful:", message)
+
+      // ✅ Redirect
+      router.push("/")
+    } catch (err) {
+      const errorMessage =
+        err?.data?.error || "User Not Found. Please try again."
+      console.error("Login error:", errorMessage)
+      alert(errorMessage)
+    }
   }
-};
-
 
   return (
     <AuthForm
@@ -59,6 +54,8 @@ const handleLogin = async (e) => {
       password={password}
       setPassword={setPassword}
       onSubmit={handleLogin}
+      isLoading={isLoading}
+      error={error}
     />
-  );
+  )
 }

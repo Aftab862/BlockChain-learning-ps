@@ -6,27 +6,20 @@ import { Button, Container, Box, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 import useMetaMask from "@/hooks/useMetaMask";
 import config from "../../config";
+import { useGetUsersQuery } from '../store/slices/user';
+
 
 export default function Home() {
-  const [users, setUsers] = useState([]);
   const router = useRouter();
   const { account, connectWallet } = useMetaMask();
+ const { data: usersData, error, isLoading } = useGetUsersQuery();
+ console.log("data stores", usersData)
+ 
+   const deleteUser = async (id) => {
+    await axios.delete(`${config.baseUrl}/delete-user/${id}`);
+  };
 
  
-  const fetchUsers = async () => {
-    const res = await axios.get(`${config.baseUrl}/get-users`);
-   console.log("api data", res)
-    setUsers(res.data.users);
-  };
-
-  const deleteUser = async (id) => {
-    await axios.delete(`${config.baseUrl}/delete-user/${id}`);
-    fetchUsers();
-  };
-
-  useEffect(() => {
-    fetchUsers();
-  }, []);
 
   return (
     <Container>
@@ -48,7 +41,7 @@ export default function Home() {
         </Box>
 
 
-        <UserTable users={users} onDelete={deleteUser} />
+        <UserTable usersData={usersData} isLoading={isLoading} onDelete={deleteUser} />
       </Box>
 
     </Container>

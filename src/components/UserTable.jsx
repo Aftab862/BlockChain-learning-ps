@@ -1,13 +1,18 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { Table, TableHead, Box, TableRow, TableCell, TableBody, Button, Container } from "@mui/material";
+import { Table, TableHead, Box, TableRow, TableCell, TableBody, Button, Container ,CircularProgress } from "@mui/material";
 
-export default function UserTable({ users, onDelete }) {
+export default function UserTable({ usersData, onDelete ,isLoading }) {
   const router = useRouter();
 
   return (
     <Container>
       <Box py={4}>
+        {isLoading ? (
+  <Box display="flex" justifyContent="center" alignItems="center" height="300px">
+    <CircularProgress />
+  </Box>
+) : (
         <Table>
           <TableHead>
             <TableRow>
@@ -21,7 +26,7 @@ export default function UserTable({ users, onDelete }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {users.map((user) => (
+            {usersData && usersData?.users.map((user) => (
               <TableRow key={user.user_id}>
                 <TableCell>{user.user_id}</TableCell>
                 <TableCell>{user.name}</TableCell>
@@ -37,6 +42,7 @@ export default function UserTable({ users, onDelete }) {
             ))}
           </TableBody>
         </Table>
+)}
       </Box>
     </Container>
 

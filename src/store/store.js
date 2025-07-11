@@ -4,8 +4,8 @@ import { userApi } from './slices/user';
 
 export const store = configureStore({
   reducer: {
-    [api.reducerPath]: api.reducer,  // Add RTK Query reducer
+    [userApi.reducerPath]: userApi.reducer,  // Add RTK Query reducer
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(api.middleware),  // Add RTK Query middleware
+    getDefaultMiddleware().concat(userApi.middleware),  // Add RTK Query middleware
 })

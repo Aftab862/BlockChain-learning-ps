@@ -4,7 +4,7 @@ import { TextField, Button, Stack, Typography, Box } from "@mui/material";
 import NextLink from 'next/link';
 import Link from '@mui/material/Link';
 
-export default function AuthForm({ isSignup, name, setName, email, setEmail, password, setPassword, onSubmit }) {
+export default function AuthForm({ isSignup, name, setName, email, setEmail, password, setPassword, onSubmit  , isLoading}) {
   return (
     <Box display="flex" justifyContent="center" alignItems="center">
       <form onSubmit={onSubmit}>
@@ -36,9 +36,20 @@ export default function AuthForm({ isSignup, name, setName, email, setEmail, pas
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <Button type="submit" variant="contained">
-            {isSignup ? "Signup" : "Login"}
-          </Button>
+       <Button
+  type="submit"
+  variant="contained"
+  disabled={isLoading}
+>
+  {isLoading
+    ? isSignup
+      ? "Signing up..."
+      : "Logging in..."
+    : isSignup
+      ? "Signup"
+      : "Login"}
+</Button>
+
 
           <Link component={NextLink} href={ isSignup?"/Auth/login": "/Auth/signup"} sx={{ textAlign: "center" }}>
   {isSignup ? "Login" : "Signup"}

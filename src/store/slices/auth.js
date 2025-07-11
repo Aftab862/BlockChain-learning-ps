@@ -2,17 +2,21 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import config from './../../../config';
 
-export const userApi = createApi({
-  reducerPath: 'userApi',  // name for the API slice
+export const authApi = createApi({
+  reducerPath: 'authApi',  // name for the API slice
   
   baseQuery: fetchBaseQuery({ baseUrl: config.baseUrl }), // your backend URL
   endpoints: (builder) => ({
-    getUsers: builder.query({
-      query: () => '/get-users',  // API endpoint: GET /users
+    login: builder.mutation({
+    query:(data)=>({
+        url:"/login",
+        method:"POST",
+        body:data
+    })
     }),
-    addUser: builder.mutation({
+    signup: builder.mutation({
       query: (newUser) => ({
-        url: '/users',
+        url: '/signup',
         method: 'POST',
         body: newUser,
       }),
@@ -20,4 +24,4 @@ export const userApi = createApi({
   }),
 })
 
-export const { useGetUsersQuery, useAddUserMutation } = userApi
+export const { useLoginMutation , useSignupMutation } = authApi
