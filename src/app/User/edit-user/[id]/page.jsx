@@ -4,10 +4,13 @@ import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
 import config from './../../../../../config';
 import UserForm from './../../../../components/UserForm';
+import { useEditUserMutation } from "@/store/slices/user";
 
 export default function EditUser() {
   const { id } = useParams();
   const router = useRouter();
+  const [editUser, { isLoading, isError, error }] = useEditUserMutation();
+
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -32,13 +35,22 @@ export default function EditUser() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.put(`${config.baseUrl}/update-user/${id}`, {
+  
+    const updatedUser = {
+     id: parseInt(id),
       name,
       email,
       phone,
       city,
       gender,
-    });
+    }
+
+  try {
+    await editUser(updatedUser).unwrap();  // Update user
+    router.push("/"); // Redirect to homepage
+  } catch (err) {
+    console.error("Error updating user:", err);
+  }
     router.push("/");
   };
 

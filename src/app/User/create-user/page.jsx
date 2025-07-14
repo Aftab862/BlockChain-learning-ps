@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Container, Box } from "@mui/material";
 import config from './../../../../config';
 import UserForm from './../../../components/UserForm';
-
+import {useAddUserMutation} from "../../../store/slices/user"
 export default function CreateUser() {
 
   const [name, setName] = useState("");
@@ -14,18 +14,18 @@ export default function CreateUser() {
   const [city, setCity] = useState("");
   const [gender, setGender] = useState("");
   const router = useRouter();
-
+const [addUser, { isLoading, isError, error }] = useAddUserMutation();
  
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.post(`${config.baseUrl}/add-user`, {
-      name,
+   
+   
+   await addUser({ name,
       email,
       phone,
       city,
-      gender,
-    });
-    router.push("/");
+      gender}).unwrap();
+      router.push("/");
   };
 
   return (

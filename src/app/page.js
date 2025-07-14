@@ -1,25 +1,31 @@
 "use client";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import UserTable from "../components/UserTable";
+import UserTable from "./User/UserTable";
 import { Button, Container, Box, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 import useMetaMask from "@/hooks/useMetaMask";
 import config from "../../config";
-import { useGetUsersQuery } from '../store/slices/user';
+import { useDeleteUserMutation, useGetUsersQuery } from '../store/slices/user';
 
 
 export default function Home() {
   const router = useRouter();
   const { account, connectWallet } = useMetaMask();
- const { data: usersData, error, isLoading } = useGetUsersQuery();
- console.log("data stores", usersData)
- 
-   const deleteUser = async (id) => {
-    await axios.delete(`${config.baseUrl}/delete-user/${id}`);
+  const { data: usersData, error, isLoading } = useGetUsersQuery();
+  console.log("data stores", usersData)
+
+  const [deleteUser, { deleteLoading = isLoading, isError }] = useDeleteUserMutation();
+
+  const handleDelete = async (id) => {
+    try {
+      await deleteUser(id);
+    } catch (error) {
+      console.log("error", error.message)
+    }
   };
 
- 
+
 
   return (
     <Container>
@@ -41,7 +47,7 @@ export default function Home() {
         </Box>
 
 
-        <UserTable usersData={usersData} isLoading={isLoading} onDelete={deleteUser} />
+        <UserTable usersData={usersData} isLoading={isLoading} deleteLoading={deleteLoading} onDelete={handleDelete} />
       </Box>
 
     </Container>
