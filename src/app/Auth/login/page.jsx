@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Cookies from "js-cookie";
 import AuthForm from "@/components/AuthForm"
 import { useRouter } from "next/navigation"
 import { useLoginMutation } from "../../../store/slices/auth"
@@ -31,10 +32,19 @@ export default function Login() {
         return
       }
 
-      localStorage.setItem("auth-token", token)
-      localStorage.setItem("user-role", role)
+      Cookies.set("auth-token", token, {
+        path: "/", // required for middleware
+        secure: true, // optional but good for production (HTTPS only)
+        sameSite: "Lax",
+      })
 
-      if(role==="admin"){
+      Cookies.set("user-role", role, {
+        path: "/",
+        secure: true,
+        sameSite: "Lax",
+      })
+
+      if (role === "admin") {
         router.push("/admin/user-listing")
 
       }

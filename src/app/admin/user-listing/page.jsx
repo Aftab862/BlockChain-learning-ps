@@ -18,16 +18,15 @@ import {
 } from "@mui/material";
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useGetUsersListingQuery } from "@/store/slices/admin";
+import Cookies from "js-cookie";
 
 export default function AdminUserListing() {
   const { data: usersData, error, isLoading } = useGetUsersListingQuery();
   const router = useRouter();
 
   const handleLogout = () => {
-    // Clear token or user data from storage
-    localStorage.removeItem("auth-token");
-    localStorage.removeItem("user-role");
-
+    Cookies.remove("auth-token");
+    Cookies.remove("user-role");
     router.push("/Auth/login");
   };
 
@@ -45,12 +44,12 @@ export default function AdminUserListing() {
       <AppBar position="static" >
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
           <Typography variant="h6">Admin Dashboard</Typography>
-         <Button color="white" sx={{textTransform:"none"}}
-           variant="outlined"
-            onClick={()=>handleLogout()}            
-         >
-          Logout
-         </Button>
+          <Button color="white" sx={{ textTransform: "none" }}
+            variant="outlined"
+            onClick={() => handleLogout()}
+          >
+            Logout
+          </Button>
         </Toolbar>
       </AppBar>
 
@@ -86,7 +85,7 @@ export default function AdminUserListing() {
                         variant="outlined"
                         size="small"
                         sx={{ mr: 1 }}
-                        // onClick={() => router.push(`/User/edit-user/${user.user_id}`)}
+                      // onClick={() => router.push(`/User/edit-user/${user.user_id}`)}
                       >
                         Edit
                       </Button>

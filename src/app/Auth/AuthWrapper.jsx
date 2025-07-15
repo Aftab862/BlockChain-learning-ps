@@ -1,69 +1,57 @@
-"use client";
+// "use client";
 
-import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+// import { usePathname, useRouter } from "next/navigation";
+// import { useEffect, useState } from "react";
+// import { isRouteAccessible, ROUTES } from "@/utils/routes";
 
-export default function AuthWrapper({ children }) {
-  const pathname = usePathname();
-  const router = useRouter();
+// export default function AuthWrapper({ children }) {
+//   const pathname = usePathname();
+//   const router = useRouter();
 
-  const [loading, setLoading] = useState(true);
-  const [authenticated, setAuthenticated] = useState(false);
-  const [hasAccess, setHasAccess] = useState(false);
+//   const [loading, setLoading] = useState(true);
+//   const [hasAccess, setHasAccess] = useState(false);
 
-  useEffect(() => {
-    const publicPaths = ["/Auth/login", "/Auth/signup"];
-    const privatePaths = ["/users", "/create-user" , "/"];
-    const protectedPaths = ["/admin/user-listing"];
+//   useEffect(() => {
+//     const token = localStorage.getItem("auth-token");
+//     const role = localStorage.getItem("user-role"); // "user" or "admin"
 
-    const token = localStorage.getItem("auth-token");
-    const userRole = localStorage.getItem("user-role") || "user";
-    // If user is logged in and tries to access public paths, redirect away
-    if (token && publicPaths.includes(pathname)) {
-      router.push("/"); // or wherever logged-in users should go
-      setLoading(false);
-      return;
-    }
+//     const isPublicRoute = ROUTES.public.includes(pathname);
 
-    // Allow public paths if no token
-    if (publicPaths.includes(pathname)) {
-      setAuthenticated(false); // not logged in
-      setHasAccess(true);
-      setLoading(false);
-      return;
-    }
+//     // 1. Public Route Logic (guest only)
+//     if (isPublicRoute) {
+//       if (token && role) {
+//         const redirectTo = role === "admin" ? "/admin" : "/";
+//         router.replace(redirectTo);
+//         // Don't update loading or access state, just exit early
+//         return;
+//       } else {
+//         setHasAccess(true); // allow guest to see public page
+//         setLoading(false);
+//         return;
+//       }
+//     }
 
-    // For private/protected routes, check token
-    if (!token) {
-      router.push("/Auth/login");
-      setLoading(false);
-      return;
-    }
+//     // 2. Private Route: no token or role = force login
+//     if (!token || !role) {
+//       router.replace("/Auth/login");
+//       // Exit early so no state updates trigger children render
+//       return;
+//     }
 
-    setAuthenticated(true);
+//     // 3. Role-Based Access
+//     const routeIsAccessible = isRouteAccessible(pathname, role);
+//     if (!routeIsAccessible) {
+//       router.replace("/unauthorized");
+//       return;
+//     }
 
-    // Role-based access control
-    if (privatePaths.includes(pathname)) {
-      setHasAccess(true);
-    } else if (protectedPaths.includes(pathname)) {
-      if (userRole === "admin") {
-        setHasAccess(true);
-      } else {
-        router.push("/");
-        setLoading(false);
-        return;
-      }
-    } else {
-      // fallback access control - allow by default or customize here
-      setHasAccess(true);
-    }
+//     // 4. Allowed
+//     setHasAccess(true);
+//     setLoading(false);
+//   }, [pathname, router]);
 
-    setLoading(false);
-  }, [pathname, router]);
+//   if (loading) return <div>Loading...</div>;
+//   if (!hasAccess) return null; // block render until access is confirmed
 
-  if (loading) return <div>Loading...</div>;
-
-  if (!hasAccess) return null;
-
-  return <>{children}</>;
-}
+//   return <>{children}</>;
+// }

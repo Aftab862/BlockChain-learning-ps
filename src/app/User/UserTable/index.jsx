@@ -4,8 +4,6 @@ import { Table, TableHead, Box, TableRow, TableCell, TableBody, Button, Containe
 
 export default function UserTable({ deleteLoading,usersData, onDelete, isLoading }) {
   const router = useRouter();
-console.log("deleteloading ,", deleteLoading)
-console.log("loading ,", isLoading)
 
   return (
     <Container>

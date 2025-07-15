@@ -7,13 +7,13 @@ import { useRouter } from "next/navigation";
 import useMetaMask from "@/hooks/useMetaMask";
 import config from "../../config";
 import { useDeleteUserMutation, useGetUsersQuery } from '../store/slices/user';
+import Cookies from "js-cookie";
 
 
 export default function Home() {
   const router = useRouter();
   const { account, connectWallet } = useMetaMask();
   const { data: usersData, error, isLoading } = useGetUsersQuery();
-  console.log("data stores", usersData)
 
   const [deleteUser, { deleteLoading = isLoading, isError }] = useDeleteUserMutation();
 
@@ -27,8 +27,13 @@ export default function Home() {
 
   const handleLogout = () => {
     // Clear token or user data from storage
-    localStorage.removeItem("auth-token");
-    localStorage.removeItem("user-role");
+    // localStorage.removeItem("auth-token");
+    // localStorage.removeItem("user-role");
+
+
+    Cookies.remove("auth-token");
+    Cookies.remove("user-role");
+    window.location.href = "/Auth/login";
 
     router.push("/Auth/login");
   };
