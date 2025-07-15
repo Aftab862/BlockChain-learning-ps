@@ -24,20 +24,25 @@ export default function Login() {
       const res = await login({ email, password }).unwrap() // <-- RTK Query call
 
       const { token, message, role } = res
+      console.log("response ", res)
 
       if (!token) {
         alert("Login failed: No token returned.")
         return
       }
 
-      // ✅ Store auth data
       localStorage.setItem("auth-token", token)
       localStorage.setItem("user-role", role)
 
-      console.log("Login successful:", message)
+      if(role==="admin"){
+        router.push("/admin/user-listing")
 
-      // ✅ Redirect
-      router.push("/")
+      }
+      else {
+        router.push("/")
+
+      }
+
     } catch (err) {
       const errorMessage =
         err?.data?.error || "User Not Found. Please try again."

@@ -28,9 +28,9 @@ console.log("loading ,", isLoading)
               </TableRow>
             </TableHead>
             <TableBody>
-              {usersData && usersData?.users.map((user) => (
+              {usersData && usersData?.users.map((user, key) => (
                 <TableRow key={user.user_id}>
-                  <TableCell>{user.user_id}</TableCell>
+                  <TableCell>{key+1}</TableCell>
                   <TableCell>{user.name}</TableCell>
                   <TableCell>{user.gender}</TableCell>
                   <TableCell>{user.email}</TableCell>

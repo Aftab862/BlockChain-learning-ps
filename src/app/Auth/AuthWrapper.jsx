@@ -13,8 +13,8 @@ export default function AuthWrapper({ children }) {
 
   useEffect(() => {
     const publicPaths = ["/Auth/login", "/Auth/signup"];
-    const privatePaths = ["/users", "/create-user"];
-    const protectedPaths = ["/admin"];
+    const privatePaths = ["/users", "/create-user" , "/"];
+    const protectedPaths = ["/admin/user-listing"];
 
     const token = localStorage.getItem("auth-token");
     const userRole = localStorage.getItem("user-role") || "user";
@@ -49,7 +49,7 @@ export default function AuthWrapper({ children }) {
       if (userRole === "admin") {
         setHasAccess(true);
       } else {
-        router.push("/dashboard");
+        router.push("/");
         setLoading(false);
         return;
       }
