@@ -27,13 +27,13 @@ export default function UnauthorizedPage() {
         <Typography variant="body1" sx={{ mb: 4 }}>
           You do not have permission to view this page.
         </Typography>
-        <Button
+        {/* <Button
           variant="contained"
           color="primary"
           onClick={handleGoHome}
         >
           Go to Dashboard
-        </Button>
+        </Button> */}
       </Box>
     </Container>
   );
