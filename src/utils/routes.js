@@ -15,9 +15,12 @@ export const ROUTES = {
   ],
   ADMIN_ROUTES: [
     "/admin",
+    "/admin/chat",
     "/admin/user-listing",
     "/admin/create-user",
     "/admin/settings",
+    "/admin/AdminChatPanel",
+
   ],
 };
 

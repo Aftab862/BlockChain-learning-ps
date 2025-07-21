@@ -24,9 +24,11 @@ export default function Login() {
     try {
       const res = await login({ email, password }).unwrap() // <-- RTK Query call
 
-      const { token, message, role } = res
+      console.log("response ", res)
+      const { token, id, role } = res
       console.log("response ", res)
 
+      debugger
       if (!token) {
         alert("Login failed: No token returned.")
         return
@@ -39,6 +41,12 @@ export default function Login() {
       })
 
       Cookies.set("user-role", role, {
+        path: "/",
+        secure: true,
+        sameSite: "Lax",
+      })
+
+         Cookies.set("user-id", id, {
         path: "/",
         secure: true,
         sameSite: "Lax",

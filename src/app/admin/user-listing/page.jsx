@@ -1,76 +1,101 @@
 'use client';
 
-import { useRouter } from "next/navigation";
+import { useRouter } from 'next/navigation';
 import {
-  AppBar,
-  Toolbar,
+  Box,
   Typography,
-  IconButton,
+  Container,
+  Card,
+  CardContent,
+  Grid,
+  CircularProgress,
   Table,
+  TableBody,
+  TableCell,
   TableHead,
   TableRow,
-  TableCell,
-  TableBody,
   Button,
-  Container,
-  CircularProgress,
-  Box
-} from "@mui/material";
-import LogoutIcon from '@mui/icons-material/Logout';
-import { useGetUsersListingQuery } from "@/store/slices/admin";
-import Cookies from "js-cookie";
+  Divider,
+} from '@mui/material';
+import { useGetUsersListingQuery } from '@/store/slices/admin';
 
-export default function AdminUserListing() {
+export default function AdminDashboard() {
   const { data: usersData, error, isLoading } = useGetUsersListingQuery();
   const router = useRouter();
 
-  const handleLogout = () => {
-    Cookies.remove("auth-token");
-    Cookies.remove("user-role");
-    router.push("/Auth/login");
-  };
-
-  const onDelete = (id) => {
-    // Add delete functionality here
-    console.log("Delete user:", id);
-  };
-
-
-
+  const totalUsers = usersData?.users?.length || 0;
+  const totalAdmins = usersData?.users?.filter((u) => u.role === 'admin').length || 0;
+  const totalRegularUsers = totalUsers - totalAdmins;
 
   return (
-    <>
-      {/* Top Navigation Bar */}
-      <AppBar position="static" >
-        <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography variant="h6">Admin Dashboard</Typography>
-          <Button color="white" sx={{ textTransform: "none" }}
-            variant="outlined"
-            onClick={() => handleLogout()}
-          >
-            Logout
-          </Button>
-        </Toolbar>
-      </AppBar>
+    <Box sx={{ py: 5, backgroundColor: '#f5f7fa', }}>
+      <Container maxWidth="xl">
+        {/* Header */}
+        <Typography variant="h4" fontWeight="bold" mb={4}>
+          Admin Dashboard
+        </Typography>
 
-      {/* Main Content */}
-      <Container maxWidth="lg">
-        <Box py={4}>
-          <Typography variant="h4" gutterBottom>User Listings</Typography>
+        {/* Analytics Summary
+        <Grid container spacing={3} mb={5}>
+          <Grid item xs={12} sm={4}>
+            <Card sx={{ borderLeft: '5px solid #1976d2', boxShadow: 3 }}>
+              <CardContent>
+                <Typography variant="subtitle2" color="text.secondary">
+                  Total Users
+                </Typography>
+                <Typography variant="h5" fontWeight="bold">
+                  {totalUsers}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <Card sx={{ borderLeft: '5px solid #43a047', boxShadow: 3 }}>
+              <CardContent>
+                <Typography variant="subtitle2" color="text.secondary">
+                  Admins
+                </Typography>
+                <Typography variant="h5" fontWeight="bold">
+                  {totalAdmins}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <Card sx={{ borderLeft: '5px solid #ff9800', boxShadow: 3 }}>
+              <CardContent>
+                <Typography variant="subtitle2" color="text.secondary">
+                  Regular Users
+                </Typography>
+                <Typography variant="h5" fontWeight="bold">
+                  {totalRegularUsers}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid> */}
 
+        {/* Divider */}
+        <Divider sx={{ mb: 4 }} />
+
+        {/* User Table */}
+        <Card sx={{ p: 2 }}>
+          <Typography variant="h6" mb={2}>
+            User Listing
+          </Typography>
           {isLoading ? (
-            <Box display="flex" justifyContent="center" alignItems="center" height="300px">
+            <Box display="flex" justifyContent="center" py={5}>
               <CircularProgress />
             </Box>
           ) : (
-            <Table>
-              <TableHead>
+            <Table size="small">
+              <TableHead sx={{ backgroundColor: '#f0f0f0' }}>
                 <TableRow>
                   <TableCell>#</TableCell>
                   <TableCell>Name</TableCell>
                   <TableCell>Email</TableCell>
                   <TableCell>Role</TableCell>
-                  <TableCell align="center">Actions</TableCell>
+                  <TableCell align="center">Action</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -79,23 +104,30 @@ export default function AdminUserListing() {
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>{user.name}</TableCell>
                     <TableCell>{user.email}</TableCell>
-                    <TableCell>{user.role}</TableCell>
+                    <TableCell>
+                      <Box
+                        component="span"
+                        sx={{
+                          bgcolor: user.role === 'admin' ? '#1976d2' : '#e0e0e0',
+                          color: user.role === 'admin' ? 'white' : 'black',
+                          px: 1.5,
+                          py: 0.5,
+                          borderRadius: 1,
+                          fontSize: '0.75rem',
+                          fontWeight: 500,
+                        }}
+                      >
+                        {user.role}
+                      </Box>
+                    </TableCell>
                     <TableCell align="center">
                       <Button
-                        variant="outlined"
+                        variant="contained"
                         size="small"
-                        sx={{ mr: 1 }}
-                      // onClick={() => router.push(`/User/edit-user/${user.user_id}`)}
+                        sx={{ bgcolor: '#1976d2' }}
+                        onClick={() => router.push(`/admin/chat/${user.id}`)}
                       >
-                        Edit
-                      </Button>
-                      <Button
-                        variant="outlined"
-                        color="error"
-                        size="small"
-                        onClick={() => onDelete(user.id)}
-                      >
-                        Delete
+                        Chat
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -103,8 +135,10 @@ export default function AdminUserListing() {
               </TableBody>
             </Table>
           )}
-        </Box>
+        </Card>
+
+
       </Container>
-    </>
+    </Box>
   );
 }

@@ -1,83 +1,86 @@
 "use client";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import UserTable from "./User/UserTable";
-import { Button, Container, Box, Typography, AppBar, Toolbar } from "@mui/material";
 import { useRouter } from "next/navigation";
+import { Button, Container, Box, Typography, Stack, Card, CardContent, Grid, Divider } from "@mui/material";
 import useMetaMask from "@/hooks/useMetaMask";
-import config from "../../config";
-import { useDeleteUserMutation, useGetUsersQuery } from '../store/slices/user';
 import Cookies from "js-cookie";
+import { Wallet } from "@mui/icons-material";
 
-
-export default function Home() {
+export default function UserDashboard() {
   const router = useRouter();
   const { account, connectWallet } = useMetaMask();
-  const { data: usersData, error, isLoading } = useGetUsersQuery();
-
-  const [deleteUser, { deleteLoading = isLoading, isError }] = useDeleteUserMutation();
-
-  const handleDelete = async (id) => {
-    try {
-      await deleteUser(id);
-    } catch (error) {
-      console.log("error", error.message)
-    }
-  };
-
-  const handleLogout = () => {
-    // Clear token or user data from storage
-    // localStorage.removeItem("auth-token");
-    // localStorage.removeItem("user-role");
-
-
-    Cookies.remove("auth-token");
-    Cookies.remove("user-role");
-    window.location.href = "/Auth/login";
-
-    router.push("/Auth/login");
-  };
-
-
 
   return (
-    <>
-
-      <AppBar position="static" >
-        <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography variant="h6">User Dashboard</Typography>
-          <Button color="white" sx={{ textTransform: "none" }}
-            variant="outlined"
-            onClick={() => handleLogout()}
-          >
-            Logout
-          </Button>
-        </Toolbar>
-      </AppBar>
-
-      <Container>
-        <Box sx={{ py: 5 }}>
-
-          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <h1>Users</h1>
-            <Button variant="contained" onClick={() => router.push("/User/create-user")}>Add User</Button>
-          </Box>
-
-          <Box py={5}>
-            {account ? (
-              <Typography variant="h6">Connected: {account}</Typography>
-            ) : (
-              <Button variant="contained" onClick={connectWallet}>
+    <Box sx={{ bgcolor: "#f5f7fa", py: 6 }}>
+      <Container maxWidth="lg">
+        {/* Hero Section */}
+        <Card sx={{ p: 5, bgcolor: "#1976d2", color: "white", mb: 5, borderRadius: 4, boxShadow: 3 }}>
+          <Typography variant="h3" fontWeight="bold" gutterBottom>
+            👋 Welcome Back!
+          </Typography>
+          <Typography variant="h6">
+            Manage your wallet, stay connected, and start chatting securely with Web3 users.
+          </Typography>
+          <Stack direction="row" spacing={2} mt={4}>
+            {!account && (
+              <Button variant="contained" onClick={connectWallet} sx={{ bgcolor: "#fff", color: "#1976d2" }}>
                 Connect MetaMask
               </Button>
             )}
-          </Box>
+            <Button
+              variant="outlined"
+              sx={{ borderColor: "#fff", color: "#fff" }}
+              onClick={() => router.push(`/User/chat-box/${Cookies.get("user-id")}`)}
+            >
+              Open Chat
+            </Button>
+          </Stack>
+        </Card>
 
+        {/* Dashboard Overview */}
+        <Grid container spacing={3}>
+          {account && (
+            <Grid item xs={12} md={6}>
+              <Card sx={{ p: 3, bgcolor: "#fff", boxShadow: 1 }}>
+                <CardContent>
+                  <Typography variant="h6" gutterBottom>
+                    <Wallet sx={{ verticalAlign: "middle", mr: 1 }} />
+                    Wallet Status
+                  </Typography>
+                  <Typography variant="body1">✅ Connected: {account}</Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          )}
 
-          <UserTable usersData={usersData} isLoading={isLoading} deleteLoading={deleteLoading} onDelete={handleDelete} />
-        </Box>
+          <Grid item xs={12} md={6}>
+            <Card sx={{ p: 3, boxShadow: 1 }}>
+              <CardContent>
+                <Typography variant="h6" gutterBottom>Quick Actions</Typography>
+                <Stack direction="row" spacing={2} mt={2}>
+                  <Button variant="outlined" onClick={() => router.push("/User/chat-box/" + Cookies.get("user-id"))}>
+                    💬 Go to Chat
+                  </Button>
+                  <Button variant="outlined" onClick={connectWallet}>
+                    🔗 {account ? "Reconnect Wallet" : "Connect Wallet"}
+                  </Button>
+                </Stack>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          {/* Recent Activity or Placeholder Section */}
+          <Grid item xs={12}>
+            <Card sx={{ p: 3, boxShadow: 1 }}>
+              <CardContent>
+                <Typography variant="h6" gutterBottom>📋 Recent Activity</Typography>
+                <Typography variant="body2" color="text.secondary">No recent activity to display. Interact to see updates.</Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
+
 
       </Container>
-    </>
+    </Box>
   );
 }
